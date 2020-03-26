@@ -105,11 +105,11 @@ export default class DraggableUploader extends React.Component {
         isUploading: true
       });
 
-      axios.post('/upload', fd)
+      axios.post('/api/upload', fd)
         .then(res => {
           console.log(res);
           let filename = res.data;
-          axios.get('/predict?fileName=' + filename)
+          axios.get('/api/predict?fileName=' + filename)
             .then(res => {
               console.log('hi');
               console.log(res);

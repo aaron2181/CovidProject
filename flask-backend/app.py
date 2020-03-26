@@ -137,13 +137,13 @@ model._make_predict_function()
 
 print('model loaded')
 
-@app.route('/', methods=['GET'])
+@app.route('/api', methods=['GET'])
 def index():
     print(template_dir)
     print(static_dir)
     return render_template('index.html')
 
-@app.route('/upload', methods=['POST'])
+@app.route('/api/upload', methods=['POST'])
 def upload_file():
     
     #print("Line 33 ======")
@@ -154,7 +154,7 @@ def upload_file():
     return jsonify(file.filename)
 
 
-@app.route('/predict', methods=['GET'])
+@app.route('/api/predict', methods=['GET'])
 def get_file():
     print("==== prediction function ====")
     usfileNameername = request.args.get('fileName')
