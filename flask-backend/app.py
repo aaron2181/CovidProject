@@ -145,7 +145,7 @@ def index():
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
-    
+
     #print("Line 33 ======")
     file = request.files['image']
     filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
@@ -173,10 +173,10 @@ def get_file():
 
     result = []
     if preds[0][1]>0.5:
-        diag = "Not Malaria"
+        diag = "Normal"
         confidence = preds[0][1]
     else:
-        diag = "Malaria"
+        diag = "Covid-19"
         confidence = preds[0][0]
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
 
