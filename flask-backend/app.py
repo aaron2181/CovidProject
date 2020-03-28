@@ -132,7 +132,8 @@ UPLOAD_FOLDER = os.path.basename('uploads')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-model = tensorflow.keras.models.load_model('./model/covid19.h5')
+model = tensorflow.keras.models.load_model('./model/magical.h5')
+model2 =
 
 
 print('model loaded')
@@ -173,13 +174,22 @@ def get_file():
 
     print('Predicted: ', preds)
 
+
     result = []
-    if preds[0][0]>0.95:
+    #xyz = preds[0][0] if preds [0][0] >
+    #print(preds[0][1], preds[0][0])
+
+    if preds[0][0]>0.98:
+        preds = model2.predict(img)
+        if preds[0][0]
         diag = "Covid"
         confidence = preds[0][0]
+
+
     else:
-        diag = "Not-Covid"
+        diag = "not-covid"
         confidence = preds[0][1]
+
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
 
 if __name__ == "__main__":
