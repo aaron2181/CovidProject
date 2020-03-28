@@ -118,35 +118,36 @@ class DraggableUploader extends Component {
     for (let i = 0; i < n; i++) {
       let file = loadedFiles.shift()
 
-      // let newFile = this.updateLoadedFile(file, {
-      //   ...file,
-      //   isUploading: true
-      // })
+      let newFile = this.updateLoadedFile(file, {
+        ...file,
+        isUploading: true
+      })
 
       // TODO: handle the array of data from fd in the backend
-      // axios.post('/api/upload', fd).then(res => {
-      //   let filename = res.data;
+      axios.post('/api/upload', fd).then(res => {
+        console.log(res)
+        // let filename = res.data;
 
-      //   axios.get('/api/predict?fileName=' + filename).then(res => {
-      //     let diagnosis = res.data.diagnosis
-      //     let confidence = res.data.confidence
+        // axios.get('/api/predict?fileName=' + filename).then(res => {
+        //   let diagnosis = res.data.diagnosis
+        //   let confidence = res.data.confidence
 
-      //     this.setState({
-      //       dataObject: {
-      //         Confidence: confidence,
-      //         Diagnosis: diagnosis,
-      //         Filename: filename,
-      //       }
-      //     })
+        //   this.setState({
+        //     dataObject: {
+        //       Confidence: confidence,
+        //       Diagnosis: diagnosis,
+        //       Filename: filename,
+        //     }
+        //   })
 
-      //     this.updateLoadedFile(newFile, {
-      //       ...newFile,
-      //       isUploading: false
-      //     })
-      //   })
-      // }).catch(err => {
-      //   console.log(err);
-      // })
+        //   this.updateLoadedFile(newFile, {
+        //     ...newFile,
+        //     isUploading: false
+        //   })
+        // })
+      }).catch(err => {
+        console.log(err);
+      })
 
       if (i === n - 1) {
         this.setState({ loadedFiles: [ ...loadedFiles ] })
