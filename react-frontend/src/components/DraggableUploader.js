@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from 'react';
 
 import { AnchorButton, Intent, ProgressBar } from "@blueprintjs/core";
 
@@ -9,13 +9,13 @@ import { remove } from 'react-icons-kit/fa/remove';
 import './assets/DraggableUploader.scss'
 import axios from 'axios'
 import Table from './Table'
-export default class DraggableUploader extends React.Component {
 
+class DraggableUploader extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loadedFiles: [],
-      fd: '',
+      fd: null,
       confidence: '',
       diagnosis: '',
       dataObject: {
@@ -24,34 +24,50 @@ export default class DraggableUploader extends React.Component {
         Diagnosis: '',        
       },
     };
+
+    this.onFileLoad = this.onFileLoad.bind(this)
+    this.addLoadedFile = this.addLoadedFile.bind(this)
+    this.removeLoadedFile = this.removeLoadedFile.bind(this)
+    this.removeAllLoadedFile = this.removeAllLoadedFile.bind(this)
+    this.updateLoadedFile = this.updateLoadedFile.bind(this)
+    this.uploadFiles = this.uploadFiles.bind(this)
   }
 
   onFileLoad(e) {
-    const file = e.currentTarget.files[0];
-    let fd = new FormData();
-    console.log(fd);
-    let fileReader = new FileReader();
-    fd.append('image', file, file.name)
-    this.setState({ fd: fd })
-    fileReader.onload = () => {
-      console.log("IMAGE LOADED: ", fileReader.result);
-      const file = {
-        data: fileReader.result,
-        isUploading: false
+    let file = null
+    let fd = this.state.fd || new FormData()
+    
+    for (let i = 0; i < e.currentTarget.files.length; i++) {
+      file = e.currentTarget.files[i]
+      
+      if (file) {
+        let fileReader = new FileReader()
+        fd.append('image', file, file.name)
+    
+        fileReader.onload = () => {
+          const file = {
+            data: fileReader.result,
+            isUploading: false
+          }
+          //Add file
+          this.addLoadedFile(file);
+        }
+    
+        fileReader.onabort = () => {
+          alert("Reading Aborted");
+        }
+    
+        fileReader.onerror = () => {
+          alert("Reading ERROR!");
+        }
+    
+        fileReader.readAsDataURL(file);
       }
-      //Add file
-      this.addLoadedFile(file);
-    }
 
-    fileReader.onabort = () => {
-      alert("Reading Aborted");
+      if (i == e.currentTarget.files.length - 1) {
+        this.setState({ fd })
+      }
     }
-
-    fileReader.onerror = () => {
-      alert("Reading ERROR!");
-    }
-
-    fileReader.readAsDataURL(file);
   }
 
   addLoadedFile(file) {
@@ -80,64 +96,69 @@ export default class DraggableUploader extends React.Component {
 
   updateLoadedFile(oldFile, newFile) {
     this.setState((prevState) => {
+      const loadedFiles = [ ...prevState.loadedFiles ]
 
-      const loadedFiles = [...prevState.loadedFiles];
       _.find(loadedFiles, (file, idx) => {
-        if (file == oldFile)
-          loadedFiles[idx] = newFile;
-      }
-      );
+        if (file === oldFile) {
+          loadedFiles[idx] = newFile
+        }
+      })
 
       return { loadedFiles };
-    });
+    })
 
     return newFile;
   }
 
-  onUpload  = () => {
+  uploadFiles() {
     const { loadedFiles, fd } = this.state;
-    console.log('ON UPLOAD...')
-    loadedFiles.map((file, idx) => {
-      console.log("Updating...");
-      //Update file (Change it's state to uploading)
-      let newFile = this.updateLoadedFile(file, {
-        ...file,
-        isUploading: true
-      });
 
-      axios.post('/api/upload', fd)
-        .then(res => {
-          console.log(res);
-          let filename = res.data;
-          axios.get('/api/predict?fileName=' + filename)
-            .then(res => {
-              console.log('hi');
-              console.log(res);
-              let diagnosis = res.data.diagnosis
-              let confidence = res.data.confidence
-              this.setState({
-                dataObject: {
-                  Confidence: confidence,
-                  Diagnosis: diagnosis,
-                  Patient_ID: '1',
-                }
-              })
-            })
+    let n = loadedFiles.length
+
+    
+    // TODO: handle the array of data from fd in the backend
+    axios.post('/api/upload', fd).then(res => {
+      let filename = ''
+      let file = null
+      let newFile = null
+
+      for (let i = 0; i < n; i++) {
+        file = loadedFiles.shift()
+    
+        // newFile = this.updateLoadedFile(file, {
+        //   ...file,
+        //   isUploading: true
+        // })
+
+        filename = res.data[i]
+  
+        axios.get('/api/predict?fileName=' + filename).then(res => {
+          let diagnosis = res.data.diagnosis
+          let confidence = res.data.confidence
+  
+          this.setState({
+            dataObject: {
+              Confidence: confidence,
+              Diagnosis: diagnosis,
+              Filename: res.config.url.split('=').pop(),
+            }
+          })
+  
+          this.updateLoadedFile(newFile, {
+            ...newFile,
+            isUploading: false
+          })
         })
-        .catch(err => {
-          console.log(err);
-        })
 
-      //Simulate a REAL WEB SERVER DOING IMAGE UPLOADING
-      setTimeout(() => {
-        //Get it back to it's original State
-        this.updateLoadedFile(newFile, {
-          ...newFile,
-          isUploading: false
-        });
-      }, 3000);
+        if (i === n - 1) {
+          this.setState({ loadedFiles: [] })
+          this.setState({ fd: null })
+        }
+      }
+    }).catch(err => {
+      console.log(err);
+    })
 
-    });
   }
 
   render() {
@@ -156,57 +177,79 @@ export default class DraggableUploader extends React.Component {
           style={{
             width: '90vw'
           }}>
+
           <input
+            multiple
             type="file"
-            id="file-browser-input"
-            name="file-browser-input"
-            ref={input => this.fileInput = input}
+            id="file-browser-input" name="file-browser-input"
+            ref={ input => this.fileInput = input }
             onDragOver={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              // console.log(e.target.files)
             }}
-            onDrop={this
-              .onFileLoad
-              .bind(this)}
-            onChange={this
-              .onFileLoad
-              .bind(this)} />
+            // onDrop={ e => this.onFileLoad(e) }
+            onChange={ e => this.onFileLoad(e) }
+          />
+
           <div className="files-preview-container ip-scrollbar">
-            {loadedFiles.map((file, idx) => {
-              return <div className="file" key={idx}>
-                <img src={file.data} />
-                <div className="container">
-                  <span className="progress-bar">
-                    {file.isUploading && <ProgressBar />}
-                  </span>
-                  <span className="remove-btn" onClick={() => this.removeLoadedFile(file)}>
-                    <Icon icon={remove} size={19} />
-                  </span>
-                </div>
-              </div>
-            })}
+            {
+              loadedFiles.map((file, idx) => {
+                return (
+                  <div className="file" key={ idx }>
+                    <img src={ file.data } />
+
+                    <div className="container">
+                      <span className="progress-bar">
+                        {
+                          file.isUploading &&
+                          <ProgressBar/>
+                        }
+                      </span>
+
+                      <span
+                        className="remove-btn"
+                        onClick={ () => this.removeLoadedFile(file) }
+                      >
+                        <Icon icon={ remove } size={ 19 } />
+                      </span>
+                    </div>
+                  </div>
+                )
+              })
+            }
           </div>
           <div 
             className="helper-text" 
             style={{
               color:'white'
           }}>Drag and Drop Here: Lung X-Ray Images</div>
+
           <div className="file-browser-container">
             <AnchorButton
               text="Browse"
-              intent={Intent.PRIMARY}
-              minimal={true}
-              onClick={() => this.fileInput.click()} />
+              intent={ Intent.PRIMARY }
+              minimal={ true }
+              onClick={ () => this.fileInput.click() }
+            />
           </div>
         </div>
+
         <AnchorButton
           text="Upload"
-          intent={Intent.SUCCESS}
-          onClick={this
-            .onUpload
-            .bind(this)} />
-        {this.state.dataObject.confidence!='' && this.state.dataObject.diagnosis!='' && <Table data={this.state.dataObject}/>}
+          style={ { marginBottom: '.5em' } }
+          intent={ Intent.SUCCESS }
+          onClick={ () => this.uploadFiles() }
+        />
+
+        {
+          this.state.dataObject.confidence !== '' &&
+          this.state.dataObject.diagnosis !== '' &&
+          <Table data={ this.state.dataObject }/>
+        }
       </div>
     );
   }
 }
+
+export default DraggableUploader

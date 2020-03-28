@@ -147,11 +147,15 @@ def index():
 def upload_file():
     
     #print("Line 33 ======")
-    file = request.files['image']
-    filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    file.save(filename)
-    print("=====uploads file======")
-    return jsonify(file.filename)
+    listFileName = []
+    files = request.files.getlist('image')
+
+    for file in files:
+      listFileName.append(file.filename)
+      filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+      file.save(filename)
+      print("=====uploads file or files======")
+    return jsonify(listFileName)
 
 
 @app.route('/api/predict', methods=['GET'])
