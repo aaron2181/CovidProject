@@ -28,10 +28,9 @@ class Table extends Component {
     return (
       <div
         className="ag-theme-balham"
-        style={ { height: '45vh', width: '90vw' } }
+        style={{ height: '45vh', width: '90vw', background: 'none' } }
       >
-        {
-          this.state.rowData.length > 0 &&
+        {this.state.rowData.length > 0 &&
           <AgGridReact
             columnDefs={ this.state.columnDefs }
             rowData={ this.state.rowData }>
