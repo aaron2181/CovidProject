@@ -2,6 +2,7 @@
   text-align: center;
   background: #142e51;
   color: white;
+  min-height: 98vh;
 }
 
 .App-logo {
