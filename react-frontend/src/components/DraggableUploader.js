@@ -132,23 +132,23 @@ class DraggableUploader extends Component {
 
         filename = res.data[i]
   
-        // axios.get('/api/predict?fileName=' + filename).then(res => {
-        //   let diagnosis = res.data.diagnosis
-        //   let confidence = res.data.confidence
+        axios.get('/api/predict?fileName=' + filename).then(res => {
+          let diagnosis = res.data.diagnosis
+          let confidence = res.data.confidence
   
-        //   this.setState({
-        //     dataObject: {
-        //       Confidence: confidence,
-        //       Diagnosis: diagnosis,
-        //       Filename: filename,
-        //     }
-        //   })
+          this.setState({
+            dataObject: {
+              Confidence: confidence,
+              Diagnosis: diagnosis,
+              Filename: filename,
+            }
+          })
   
-        //   this.updateLoadedFile(newFile, {
-        //     ...newFile,
-        //     isUploading: false
-        //   })
-        // })
+          this.updateLoadedFile(newFile, {
+            ...newFile,
+            isUploading: false
+          })
+        })
 
         if (i === n - 1) {
           this.setState({ loadedFiles: [] })
