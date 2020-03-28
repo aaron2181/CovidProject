@@ -150,7 +150,7 @@ export default class DraggableUploader extends React.Component {
           display: "flex",
           flexDirection: "column"
         }}>
-        <div className="sub-header">Malaria Detection Desktop Application (Beta)</div>
+        <div className="sub-header">Covid-19 Detection System</div>
         <div className="draggable-container">
           <input
             type="file"
@@ -182,7 +182,7 @@ export default class DraggableUploader extends React.Component {
               </div>
             })}
           </div>
-          <div className="helper-text">Drag and Drop Images Here</div>
+          <div className="helper-text">Drag and Drop Here: Lung X-Ray Images</div>
           <div className="file-browser-container">
             <AnchorButton
               text="Browse"
