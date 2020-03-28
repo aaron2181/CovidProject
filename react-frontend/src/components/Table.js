@@ -28,7 +28,7 @@ class Table extends Component {
     return (
       <div
         className="ag-theme-balham"
-        style={{ height: '45vh', width: '90vw', background: 'none' } }
+        style={{ height: '45vh', width: '500px', background: 'none' } }
       >
         {this.state.rowData.length > 0 &&
           <AgGridReact
