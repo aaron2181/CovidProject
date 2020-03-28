@@ -115,8 +115,6 @@ class DraggableUploader extends Component {
 
     let n = loadedFiles.length
 
-    
-    // TODO: handle the array of data from fd in the backend
     axios.post('/api/upload', fd).then(res => {
       let filename = ''
       let file = null
@@ -167,21 +165,19 @@ class DraggableUploader extends Component {
     return (
       <div
         className="inner-container"
-        style={{
-          display: "flex",
-          flexDirection: "column"
-        }}>
+        style={ { display: "flex", flexDirection: "column" } }
+      >
+
         <div className="sub-header">Covid-19 Detection System</div>
+
         <div 
           className="draggable-container"
-          style={{
-            width: '90vw'
-          }}>
-
+          style={ { width: '90vw' } }
+        >
+          {/* TODO: fix the double submit issue */}
           <input
             multiple
-            type="file"
-            id="file-browser-input" name="file-browser-input"
+            type="file" id="file-browser-input" name="file-browser-input"
             ref={ input => this.fileInput = input }
             onDragOver={(e) => {
               e.preventDefault();
@@ -219,11 +215,13 @@ class DraggableUploader extends Component {
               })
             }
           </div>
+
           <div 
             className="helper-text" 
-            style={{
-              color:'white'
-          }}>Drag and Drop Here: Lung X-Ray Images</div>
+            style={ { color:'white' } }
+          >
+            Drag and Drop Here: Lung X-Ray Images
+          </div>
 
           <div className="file-browser-container">
             <AnchorButton
