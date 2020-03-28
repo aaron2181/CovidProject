@@ -118,41 +118,43 @@ class DraggableUploader extends Component {
     
     // TODO: handle the array of data from fd in the backend
     axios.post('/api/upload', fd).then(res => {
-      console.log(res)
+      let filename = ''
+      let file = null
+      let newFile = null
 
-      // for (let i = 0; i < n; i++) {
-      //   // let file = loadedFiles.shift()
+      for (let i = 0; i < n; i++) {
+        file = loadedFiles.shift()
     
-      //   // let newFile = this.updateLoadedFile(file, {
-      //   //   ...file,
-      //   //   isUploading: true
-      //   // })
+        // newFile = this.updateLoadedFile(file, {
+        //   ...file,
+        //   isUploading: true
+        // })
 
-      //   // let filename = res.data;
+        filename = res.data[i]
   
-      //   // axios.get('/api/predict?fileName=' + filename).then(res => {
-      //   //   let diagnosis = res.data.diagnosis
-      //   //   let confidence = res.data.confidence
+        // axios.get('/api/predict?fileName=' + filename).then(res => {
+        //   let diagnosis = res.data.diagnosis
+        //   let confidence = res.data.confidence
   
-      //   //   this.setState({
-      //   //     dataObject: {
-      //   //       Confidence: confidence,
-      //   //       Diagnosis: diagnosis,
-      //   //       Filename: filename,
-      //   //     }
-      //   //   })
+        //   this.setState({
+        //     dataObject: {
+        //       Confidence: confidence,
+        //       Diagnosis: diagnosis,
+        //       Filename: filename,
+        //     }
+        //   })
   
-      //   //   this.updateLoadedFile(newFile, {
-      //   //     ...newFile,
-      //   //     isUploading: false
-      //   //   })
-      //   // })
+        //   this.updateLoadedFile(newFile, {
+        //     ...newFile,
+        //     isUploading: false
+        //   })
+        // })
 
-      //   if (i === n - 1) {
-      //     this.setState({ loadedFiles: [] })
-      //     this.setState({ fd: null })
-      //   }
-      // }
+        if (i === n - 1) {
+          this.setState({ loadedFiles: [] })
+          this.setState({ fd: null })
+        }
+      }
     }).catch(err => {
       console.log(err);
     })

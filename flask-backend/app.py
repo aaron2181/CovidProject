@@ -152,9 +152,9 @@ def upload_file():
 
     for file in files:
       listFileName.append(file.filename)
-      # filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-      # file.save(filename)
-      # print("=====uploads file======")
+      filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+      file.save(filename)
+      print("=====uploads file or files======")
     return jsonify(listFileName)
 
 
