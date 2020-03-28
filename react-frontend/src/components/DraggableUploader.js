@@ -133,7 +133,6 @@ class DraggableUploader extends Component {
         filename = res.data[i]
   
         axios.get('/api/predict?fileName=' + filename).then(res => {
-          console.log(res)
           let diagnosis = res.data.diagnosis
           let confidence = res.data.confidence
   
@@ -141,14 +140,14 @@ class DraggableUploader extends Component {
             dataObject: {
               Confidence: confidence,
               Diagnosis: diagnosis,
-              Filename: filename,
+              Filename: res.config.url.split('=').pop(),
             }
           })
   
-          // this.updateLoadedFile(newFile, {
-          //   ...newFile,
-          //   isUploading: false
-          // })
+          this.updateLoadedFile(newFile, {
+            ...newFile,
+            isUploading: false
+          })
         })
 
         if (i === n - 1) {
