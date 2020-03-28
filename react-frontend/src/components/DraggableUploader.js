@@ -167,14 +167,17 @@ class DraggableUploader extends Component {
     return (
       <div
         className="inner-container"
-        style={ { display: "flex", flexDirection: "column" } }
-      >
+        style={{
+          display: "flex",
+          flexDirection: "column"
+        }}>
+        <div className="sub-header">Covid-19 Detection System</div>
+        <div 
+          className="draggable-container"
+          style={{
+            width: '90vw'
+          }}>
 
-        <div className="sub-header">
-          Malaria Detection Desktop Application (Beta)
-        </div>
-
-        <div className="draggable-container">
           <input
             multiple
             type="file"
@@ -216,8 +219,11 @@ class DraggableUploader extends Component {
               })
             }
           </div>
-
-          <div className="helper-text">Drag and Drop Images Here</div>
+          <div 
+            className="helper-text" 
+            style={{
+              color:'white'
+          }}>Drag and Drop Here: Lung X-Ray Images</div>
 
           <div className="file-browser-container">
             <AnchorButton

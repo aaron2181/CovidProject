@@ -28,7 +28,7 @@ class Table extends Component {
     return (
       <div
         className="ag-theme-balham"
-        style={ { height: '500px', width: '560px' } }
+        style={ { height: '45vh', width: '90vw' } }
       >
         {
           this.state.rowData.length > 0 &&
