@@ -30,8 +30,8 @@ class Table extends Component {
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '500px',
-                    width: '600px'
+                    height: '45vh',
+                    width: '90vw'
                 }}
             >
                 <AgGridReact
