@@ -26,16 +26,19 @@ class Table extends Component {
 
   render() {
     return (
-      <div
-        className="ag-theme-balham"
-        style={ { height: '45vh', width: '90vw' } }
-      >
+      <div>
         {
-          this.state.rowData.length > 0 &&
-          <AgGridReact
-            columnDefs={ this.state.columnDefs }
-            rowData={ this.state.rowData }>
-          </AgGridReact>
+          this.state.rowData.length > 0 && (
+            <div
+              className="ag-theme-balham"
+              style={ { height: '45vh', width: '90vw' } }
+            >
+              <AgGridReact
+                columnDefs={ this.state.columnDefs }
+                rowData={ this.state.rowData }>
+              </AgGridReact>
+            </div>
+          )
         }
       </div>
     )
