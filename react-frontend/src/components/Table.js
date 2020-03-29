@@ -12,11 +12,11 @@ class Table extends Component {
         { headerName: "Confidence", field: "Confidence", sortable: true },
         { headerName: "Diagnosis", field: "Diagnosis", sortable: true },
         {
-	  headerName: "Timestamp",
-	  field: "Timestamp",
-	  sortable: true,
-	  sort: "desc" 
-	},
+          headerName: "Timestamp",
+          field: "Timestamp",
+          sortable: true,
+          sort: "desc" 
+        },
       ],
       rowData: [],
     }
@@ -25,7 +25,7 @@ class Table extends Component {
   componentWillReceiveProps(props) {
     if (
       props.data.Confidence !== '' && props.data.Diagnosis !== '' &&
-      JSON.stringify(this.props.data) !=
+      JSON.stringify(this.props.data) !==
       JSON.stringify(this.state.rowData[this.state.rowData.length - 1])
     ) {
       this.setState({ rowData: [ ...this.state.rowData, props.data ] })
