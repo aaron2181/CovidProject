@@ -168,7 +168,9 @@ class DraggableUploader extends Component {
         style={ { display: "flex", flexDirection: "column" } }
       >
 
-        <div className="sub-header">Covid-19 Detection System</div>
+        <div 
+         className="sub-header"
+         style={{'font-size': '3vw'}}>Covid-19 Detection System</div>
 
         <div 
           className="draggable-container"
@@ -216,16 +218,13 @@ class DraggableUploader extends Component {
             }
           </div>
 
-          <div 
-            className="helper-text" 
-            style={ { color:'white' } }
-          >
-            Drag and Drop Here: Lung X-Ray Images
+          <div className="helper-text" >
+            Drag and Drop Here: Lung X-Ray Image(s)
           </div>
 
           <div className="file-browser-container">
             <AnchorButton
-              text="Browse"
+              text="Browse Files"
               intent={ Intent.PRIMARY }
               minimal={ true }
               onClick={ () => this.fileInput.click() }
