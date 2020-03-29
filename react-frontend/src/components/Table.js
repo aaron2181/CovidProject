@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { AnchorButton } from '@blueprintjs/core';
 
 class Table extends Component {
   constructor(props) {
@@ -44,7 +45,6 @@ class Table extends Component {
             maxWidth: '630px'
           }
         }
-      >
         {
           this.state.rowData.length > 0 &&
           <AgGridReact
@@ -52,8 +52,52 @@ class Table extends Component {
             rowData={ this.state.rowData }>
           </AgGridReact>
         }
+        {
+          this.state.rowData.length > 0 &&
+          <Exporter data={this.state}/>
+        }
       </div>
     )
+  }
+}
+
+class Exporter extends Component {
+
+  exportFun(){
+      if(this.props.data.rowData.length > 0) {
+          var json = this.props.data.rowData
+          var fields = ["Filename", "Confidence", "Diagnosis"]
+          var replacer = function(key, value) { return value === null ? '' : value } 
+          var csv = json.map(function(row){
+            return fields.map(function(fieldName){
+              return JSON.stringify(row[fieldName], replacer)
+            }).join(',')
+          })
+          csv.unshift(fields.join(',')) // add header column
+          csv = csv.join('\r\n');
+
+          //Download the file as CSV
+          var downloadLink = document.createElement("a");
+          var blob = new Blob(["\ufeff", csv]);
+          var url = URL.createObjectURL(blob);
+          downloadLink.href = url;
+          downloadLink.download = "CovidLungAnalysis.csv";  //Name the file here
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+      } else {
+          alert("This table is empty");
+      }
+  }
+
+  render(){
+      return(
+          <AnchorButton 
+          text="Export Table" 
+          onClick={() => this.exportFun()}
+          style={ { marginBottom: '.5em', width:'250px', height: '2em' } }
+          />
+      )
   }
 }
 

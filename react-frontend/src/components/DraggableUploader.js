@@ -6,9 +6,10 @@ import _ from "lodash";
 
 import { Icon } from "react-icons-kit";
 import { remove } from 'react-icons-kit/fa/remove';
-import './assets/DraggableUploader.scss'
-import axios from 'axios'
-import Table from './Table'
+import './assets/DraggableUploader.scss';
+import axios from 'axios';
+import Table from './Table';
+//import Exporter from './ExportTable';
 
 class DraggableUploader extends Component {
   constructor(props) {
@@ -231,13 +232,14 @@ class DraggableUploader extends Component {
             />
           </div>
         </div>
-
-        <AnchorButton
-          text="Analyze Image(s)"
-          style={ { marginBottom: '.5em', width:'25em', height: '2em' } }
-          intent={ Intent.SUCCESS }
-          onClick={ () => this.uploadFiles() }
-        />
+        <span>
+          <AnchorButton
+            text="Analyze Image(s)"
+            style={ { marginBottom: '.5em', width:'25em', height: '2em' } }
+            intent={ Intent.SUCCESS }
+            onClick={ () => this.uploadFiles() }
+          />
+        </span>
 
         {
           this.state.dataObject.confidence !== '' &&
