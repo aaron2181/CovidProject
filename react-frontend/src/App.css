@@ -1,7 +1,7 @@
 .App {
   text-align: center;
-  background: #142e51;
-  color: white;
+  background: white;
+  color: black;
   min-height: 98vh;
 }
 
@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(39, 39, 39);
 }
 
 .App-link {

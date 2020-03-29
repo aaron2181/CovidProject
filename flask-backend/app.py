@@ -168,25 +168,31 @@ def get_file():
 
     img = Image.open(filepath)
 
-    img = img.resize((224,224))
+    img = img.resize((64,64))
 
     img = np.array(img)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = img / 255.0
-    img = img.reshape(1,224,224,3)
-    preds = model.predict(img)
+    img = img.reshape(1,64,64,3)
+
     preds2 = model2.predict(img)
-
-    print('Predicted: ', preds)
-
 
     result = []
     #xyz = preds[0][0] if preds [0][0] >
     #print(preds[0][1], preds[0][0])
 
-    if preds2[0][0]>0.9:
-        pred = model.predict(img)
-        if preds[0][0] > 0.98:
+    if preds2[0][1] > 0.5:
+        img = Image.open(filepath)
+
+        img = img.resize((224,224))
+
+        img = np.array(img)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = img / 255.0
+        img = img.reshape(1,224,224,3)
+        preds = model.predict(img)
+
+        if preds[0][0] > 0.99:
             diag = "Covid"
             confidence = preds[0][0]
         else:
@@ -194,8 +200,8 @@ def get_file():
             confidence = preds[0][1]
 
     else:
-        diag = "not-Pneumonia"
-        confidence = preds[0][1]
+        diag = "Neither Covid nor Pneumonia"
+        confidence = preds2[0][0]
 
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
 
