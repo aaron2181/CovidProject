@@ -11,9 +11,14 @@ class Table extends Component {
         { headerName: "Filename", field: "Filename", sortable: true },
         { headerName: "Confidence", field: "Confidence", sortable: true },
         { headerName: "Diagnosis", field: "Diagnosis", sortable: true },
-        { headerName: "Timestamp", field: "Timestamp", sortable: true },
+        {
+	  headerName: "Timestamp",
+	  field: "Timestamp",
+	  sortable: true,
+	  sort: "desc" 
+	},
       ],
-      rowData: []
+      rowData: [],
     }
   }
 
@@ -27,18 +32,7 @@ class Table extends Component {
     }
   }
 
-  sorted = data => {
-    return data.sort((a, b) => {
-      let ta = new Date(a.Timestamp)
-      let tb = new Date(b.Timestamp)
-
-      return tb.getTime() - ta.getTime()
-    })
-  }
-
   render() {
-    let rows = this.sorted(this.state.rowData)
-
     return (
       <div
         className="ag-theme-balham"
@@ -48,7 +42,7 @@ class Table extends Component {
           this.state.rowData.length > 0 &&
           <AgGridReact
             columnDefs={ this.state.columnDefs }
-            rowData={ rows }>
+            rowData={ this.state.rowData }>
           </AgGridReact>
         }
       </div>
