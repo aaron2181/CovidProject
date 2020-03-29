@@ -19,26 +19,7 @@ class Table extends Component {
           sort: "desc" 
         },
       ],
-      rowData: [
-        {
-          Filename: 'dank.txt',
-          Confidence: 0.99,
-          Diagnosis: 't1',
-          Timestamp: new Date(Date.now()),
-        },
-        {
-          Filename: 'dank.txt',
-          Confidence: 0.991,
-          Diagnosis: 't2',
-          Timestamp: new Date(Date.now() + 5),
-        },
-        {
-          Filename: 'dank.txt',
-          Confidence: 0.992,
-          Diagnosis: 't3',
-          Timestamp: new Date(Date.now() + 10),
-        },
-      ],
+      rowData: [],
     }
   }
 
