@@ -175,6 +175,16 @@ def get_file():
     img = img / 255.0
     img = img.reshape(1,224,224,3)
     preds = model.predict(img)
+    
+    img = Image.open(filepath)
+
+    img = img.resize((224,224))
+
+    img = np.array(img)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = img / 255.0
+    img = img.reshape(1,64,64,3)
+
     preds2 = model2.predict(img)
 
     print('Predicted: ', preds)
