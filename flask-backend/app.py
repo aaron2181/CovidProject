@@ -165,20 +165,10 @@ def get_file():
     usfileNameername = request.args.get('fileName')
     filepath = './uploads/' + usfileNameername
     print("filepath:" + filepath)
-
-    img = Image.open(filepath)
-
-    img = img.resize((224,224))
-
-    img = np.array(img)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = img / 255.0
-    img = img.reshape(1,224,224,3)
-    preds = model.predict(img)
     
     img = Image.open(filepath)
 
-    img = img.resize((224,224))
+    img = img.resize((64,64))
 
     img = np.array(img)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -187,15 +177,21 @@ def get_file():
 
     preds2 = model2.predict(img)
 
-    print('Predicted: ', preds)
-
-
     result = []
     #xyz = preds[0][0] if preds [0][0] >
     #print(preds[0][1], preds[0][0])
 
-    if preds2[0][0]>0.9:
-        pred = model.predict(img)
+    if preds2[0][0] > 0.98:
+        img = Image.open(filepath)
+
+        img = img.resize((224,224))
+
+        img = np.array(img)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = img / 255.0
+        img = img.reshape(1,224,224,3)
+        preds = model.predict(img)
+
         if preds[0][0] > 0.98:
             diag = "Covid"
             confidence = preds[0][0]
@@ -204,8 +200,8 @@ def get_file():
             confidence = preds[0][1]
 
     else:
-        diag = "not-Pneumonia"
-        confidence = preds[0][1]
+        diag = "Not-Pneumonia"
+        confidence = preds2[0][1]
 
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
 
