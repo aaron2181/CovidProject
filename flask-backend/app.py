@@ -165,7 +165,7 @@ def get_file():
     usfileNameername = request.args.get('fileName')
     filepath = './uploads/' + usfileNameername
     print("filepath:" + filepath)
-    
+
     img = Image.open(filepath)
 
     img = img.resize((64,64))
@@ -181,7 +181,7 @@ def get_file():
     #xyz = preds[0][0] if preds [0][0] >
     #print(preds[0][1], preds[0][0])
 
-    if preds2[0][0] > 0.98:
+    if preds2[0][1] > 0.5:
         img = Image.open(filepath)
 
         img = img.resize((224,224))
@@ -192,7 +192,7 @@ def get_file():
         img = img.reshape(1,224,224,3)
         preds = model.predict(img)
 
-        if preds[0][0] > 0.98:
+        if preds[0][0] > 0.99:
             diag = "Covid"
             confidence = preds[0][0]
         else:
@@ -200,11 +200,11 @@ def get_file():
             confidence = preds[0][1]
 
     else:
-        diag = "Not-Pneumonia"
+        diag = "Neither Covid nor Pneumonia"
         confidence = preds2[0][1]
 
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
 
 if __name__ == "__main__":
     # app.run(use_reloader=True, host="0.0.0.0", port=80, threaded=True)
-    app.run(use_reloader=True, host="127.0.0.1", port=5000, threaded=True)
+    app.run(use_reloader=True, host="127.0.0.1", port=5000, threaded=True,debug=True)
