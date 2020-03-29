@@ -31,7 +31,6 @@ class DraggableUploader extends Component {
     this.removeAllLoadedFile = this.removeAllLoadedFile.bind(this)
     this.updateLoadedFile = this.updateLoadedFile.bind(this)
     this.uploadFiles = this.uploadFiles.bind(this)
-    this.test = this.test.bind(this)
   }
 
   onFileLoad(e) {
