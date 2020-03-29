@@ -201,7 +201,7 @@ def get_file():
 
     else:
         diag = "Neither Covid nor Pneumonia"
-        confidence = preds2[0][1]
+        confidence = preds2[0][0]
 
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
 
