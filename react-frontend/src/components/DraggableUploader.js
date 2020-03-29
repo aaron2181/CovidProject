@@ -235,7 +235,7 @@ class DraggableUploader extends Component {
         <span>
           <AnchorButton
             text="Analyze Image(s)"
-            style={ { marginBottom: '.5em', width:'25em', height: '2em' } }
+            className="i-btn"
             intent={ Intent.SUCCESS }
             onClick={ () => this.uploadFiles() }
           />

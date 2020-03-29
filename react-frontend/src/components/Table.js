@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { AnchorButton } from '@blueprintjs/core';
+import { AnchorButton, Intent } from '@blueprintjs/core';
 
 class Table extends Component {
   constructor(props) {
@@ -19,7 +19,26 @@ class Table extends Component {
           sort: "desc" 
         },
       ],
-      rowData: [],
+      rowData: [
+        {
+          Filename: 'dank.txt',
+          Confidence: 0.99,
+          Diagnosis: 't1',
+          Timestamp: new Date(Date.now()),
+        },
+        {
+          Filename: 'dank.txt',
+          Confidence: 0.991,
+          Diagnosis: 't2',
+          Timestamp: new Date(Date.now() + 5),
+        },
+        {
+          Filename: 'dank.txt',
+          Confidence: 0.992,
+          Diagnosis: 't3',
+          Timestamp: new Date(Date.now() + 10),
+        },
+      ],
     }
   }
 
@@ -39,12 +58,14 @@ class Table extends Component {
         className="ag-theme-balham"
         style={
           {
-            height: '45vh',
+            height: '40vh',
+            minHeight: '200px',
             width: '90vw',
             minWidth: '580px' ,
             maxWidth: '630px'
           }
         }
+      >
         {
           this.state.rowData.length > 0 &&
           <AgGridReact
@@ -54,7 +75,7 @@ class Table extends Component {
         }
         {
           this.state.rowData.length > 0 &&
-          <Exporter data={this.state}/>
+          <Exporter data={ this.state } />
         }
       </div>
     )
@@ -63,41 +84,47 @@ class Table extends Component {
 
 class Exporter extends Component {
 
-  exportFun(){
-      if(this.props.data.rowData.length > 0) {
-          var json = this.props.data.rowData
-          var fields = ["Filename", "Confidence", "Diagnosis"]
-          var replacer = function(key, value) { return value === null ? '' : value } 
-          var csv = json.map(function(row){
-            return fields.map(function(fieldName){
-              return JSON.stringify(row[fieldName], replacer)
-            }).join(',')
-          })
-          csv.unshift(fields.join(',')) // add header column
-          csv = csv.join('\r\n');
+  exportFun() {
+    if (this.props.data.rowData.length > 0) {
+      let json = this.props.data.rowData
+      let fields = ["Filename", "Confidence", "Diagnosis"]
+      let replacer = (key, value) => { return value === null ? '' : value }
+ 
+      let csv = json.map(row => {
+        return fields.map(fieldName => {
+          return JSON.stringify(row[fieldName], replacer)
+        }).join(',')
+      })
 
-          //Download the file as CSV
-          var downloadLink = document.createElement("a");
-          var blob = new Blob(["\ufeff", csv]);
-          var url = URL.createObjectURL(blob);
-          downloadLink.href = url;
-          downloadLink.download = "CovidLungAnalysis.csv";  //Name the file here
-          document.body.appendChild(downloadLink);
-          downloadLink.click();
-          document.body.removeChild(downloadLink);
-      } else {
-          alert("This table is empty");
-      }
+      // add header column
+      csv.unshift(fields.join(','))
+      csv = csv.join('\r\n');
+
+      //Download the file as CSV
+      let downloadLink = document.createElement("a");
+      let blob = new Blob(["\ufeff", csv]);
+      let url = URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = "CovidLungAnalysis.csv";  //Name the file here
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(url)
+    } else {
+      alert("This table is empty");
+    }
   }
 
   render(){
-      return(
-          <AnchorButton 
-          text="Export Table" 
-          onClick={() => this.exportFun()}
-          style={ { marginBottom: '.5em', width:'250px', height: '2em' } }
-          />
-      )
+    return(
+      <AnchorButton 
+        text="Export Table"
+        className="i-btn"
+        intent={ Intent.SUCCESS }
+        onClick={ () => this.exportFun() }
+        style={ { marginTop: '.5em' } }
+      />
+    )
   }
 }
 

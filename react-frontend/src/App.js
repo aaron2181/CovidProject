@@ -14,7 +14,6 @@ class App extends Component {
       <div className="App">        
         <DraggableUploader />
         {/* <UploadFile /> */}
-        
       </div>
     );
   }
