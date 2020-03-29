@@ -132,8 +132,8 @@ UPLOAD_FOLDER = os.path.basename('uploads')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-model = tensorflow.keras.models.load_model('./model/magical.h5')
-model2 =
+model = tensorflow.keras.models.load_model('./model/covid.h5')
+model2 = tensorflow.keras.models.load_model('./model/hist1.h5')
 
 
 print('model loaded')
@@ -175,6 +175,7 @@ def get_file():
     img = img / 255.0
     img = img.reshape(1,224,224,3)
     preds = model.predict(img)
+    preds2 = model2.predict(img)
 
     print('Predicted: ', preds)
 
@@ -183,15 +184,17 @@ def get_file():
     #xyz = preds[0][0] if preds [0][0] >
     #print(preds[0][1], preds[0][0])
 
-    if preds[0][0]>0.98:
-        preds = model2.predict(img)
-        if preds[0][0]
-        diag = "Covid"
-        confidence = preds[0][0]
-
+    if preds2[0][0]>0.9:
+        pred = model.predict(img)
+        if preds[0][0] > 0.98:
+            diag = "Covid"
+            confidence = preds[0][0]
+        else:
+            diag = "Pneumonia"
+            confidence = preds[0][1]
 
     else:
-        diag = "not-covid"
+        diag = "not-Pneumonia"
         confidence = preds[0][1]
 
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
