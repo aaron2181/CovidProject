@@ -15,14 +15,16 @@ class Table extends Component {
       ],
       rowData: []
     }
-
-    this.setRowData = this.setRowData.bind(this)
   }
 
-  setRowData(props) {
-    let rowData = this.sorted([ ...this.state.rowData, props.data ])
-
-    this.setState({ rowData })
+  componentWillReceiveProps(props) {
+    if (
+      props.data.Confidence !== '' && props.data.Diagnosis !== '' &&
+      JSON.stringify(this.props.data) !=
+      JSON.stringify(this.state.rowData[this.state.rowData.length - 1])
+    ) {
+      this.setState({ rowData: [ ...this.state.rowData, props.data ] })
+    }
   }
 
   sorted = data => {
@@ -34,16 +36,9 @@ class Table extends Component {
     })
   }
 
-  componentWillReceiveProps(props) {
-    if (
-      props.data.Confidence !== '' && props.data.Diagnosis !== '' &&
-      this.props.data !== this.state.rowData[this.state.rowData.length - 1]
-    ) {
-      this.setRowData(props)
-    }
-  }
-
   render() {
+    let rows = this.sorted(this.state.rowData)
+
     return (
       <div
         className="ag-theme-balham"
@@ -53,7 +48,7 @@ class Table extends Component {
           this.state.rowData.length > 0 &&
           <AgGridReact
             columnDefs={ this.state.columnDefs }
-            rowData={ this.state.rowData }>
+            rowData={ rows }>
           </AgGridReact>
         }
       </div>
