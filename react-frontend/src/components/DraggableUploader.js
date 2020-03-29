@@ -65,7 +65,7 @@ class DraggableUploader extends Component {
         fileReader.readAsDataURL(file);
       }
 
-      if (i == e.currentTarget.files.length - 1) {
+      if (i === e.currentTarget.files.length - 1) {
         this.setState({ fd })
       }
     }
@@ -85,7 +85,7 @@ class DraggableUploader extends Component {
     this.setState((prevState) => {
       let loadedFiles = prevState.loadedFiles;
       let newLoadedFiles = _.filter(loadedFiles, (ldFile) => {
-        return ldFile != file;
+        return ldFile !== file;
       });
       return { loadedFiles: newLoadedFiles };
     });
@@ -118,16 +118,15 @@ class DraggableUploader extends Component {
 
     axios.post('/api/upload', fd).then(res => {
       let filename = ''
-      let file = null
       let newFile = null
 
       for (let i = 0; i < n; i++) {
-        file = loadedFiles.shift()
+        let file = loadedFiles.shift()
     
-        // newFile = this.updateLoadedFile(file, {
-        //   ...file,
-        //   isUploading: true
-        // })
+        newFile = this.updateLoadedFile(file, {
+          ...file,
+          isUploading: true
+        })
 
         filename = res.data[i]
   
@@ -140,6 +139,7 @@ class DraggableUploader extends Component {
               Confidence: confidence,
               Diagnosis: diagnosis,
               Filename: res.config.url.split('=').pop(),
+              Timestamp: Date(Date.now()),
             }
           })
   
