@@ -121,6 +121,7 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 from flask import jsonify
+import cv2
 
 template_dir = os.path.abspath('../react-frontend/build/')
 static_dir   = os.path.abspath('../react-frontend/build/static')
@@ -131,9 +132,9 @@ UPLOAD_FOLDER = os.path.basename('uploads')
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-model = tensorflow.keras.models.load_model('./model/train_model.h5')
+model = tensorflow.keras.models.load_model('./model/covid.h5')
+model2 = tensorflow.keras.models.load_model('./model/please.h5')
 
-model._make_predict_function()
 
 print('model loaded')
 
@@ -145,7 +146,7 @@ def index():
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
-    
+
     #print("Line 33 ======")
     listFileName = []
     files = request.files.getlist('image')
@@ -167,21 +168,35 @@ def get_file():
 
     img = Image.open(filepath)
 
-    img = img.resize((64,64))
+    img = img.resize((224,224))
+
     img = np.array(img)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = img / 255.0
-    img = img.reshape(1,64,64,3)
+    img = img.reshape(1,224,224,3)
     preds = model.predict(img)
+    preds2 = model2.predict(img)
 
     print('Predicted: ', preds)
 
+
     result = []
-    if preds[0][1]>0.5:
-        diag = "Not Malaria"
-        confidence = preds[0][1]
+    #xyz = preds[0][0] if preds [0][0] >
+    #print(preds[0][1], preds[0][0])
+
+    if preds2[0][0]>0.9:
+        pred = model.predict(img)
+        if preds[0][0] > 0.98:
+            diag = "Covid"
+            confidence = preds[0][0]
+        else:
+            diag = "Pneumonia"
+            confidence = preds[0][1]
+
     else:
-        diag = "Malaria"
-        confidence = preds[0][0]
+        diag = "not-Pneumonia"
+        confidence = preds[0][1]
+
     return jsonify({"diagnosis":diag,"confidence":str(confidence)})
 
 if __name__ == "__main__":
