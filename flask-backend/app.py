@@ -133,7 +133,7 @@ UPLOAD_FOLDER = os.path.basename('uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 model = tensorflow.keras.models.load_model('./model/covid.h5')
-model2 = tensorflow.keras.models.load_model('./model/hist1.h5')
+model2 = tensorflow.keras.models.load_model('./model/please.h5')
 
 
 print('model loaded')
