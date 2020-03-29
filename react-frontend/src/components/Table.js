@@ -24,6 +24,10 @@ class Table extends Component {
     }
   }
 
+  // sorted = () => {
+
+  // }
+
   render() {
     return (
       <div>
