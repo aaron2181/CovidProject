@@ -243,6 +243,7 @@ class DraggableUploader extends Component {
           <div className="file-browser-container">
             <button
               type="button" className="btn btn-primary"
+              style={ { minWidth: '150px' } }
               onClick={ () => this.fileInput.click() }
             >
               Upload file(s)

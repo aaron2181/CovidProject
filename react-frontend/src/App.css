@@ -27,7 +27,8 @@
 }
 
 .i-btn {
-  width: 25em;
+  width: 40vw;
+  min-width: 200px;
 }
 
 @keyframes App-logo-spin {
