@@ -197,7 +197,7 @@ def get_file():
             confidence = preds[0][0]
         else:
             diag = "Pneumonia"
-            confidence = preds[0][1]
+            confidence = preds2[0][1]
 
     else:
         diag = "Neither Covid nor Pneumonia"

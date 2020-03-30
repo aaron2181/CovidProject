@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { AnchorButton, Intent, ProgressBar } from "@blueprintjs/core";
+import { ProgressBar } from "@blueprintjs/core";
 
 import _ from "lodash";
 
@@ -116,47 +116,51 @@ class DraggableUploader extends Component {
 
     let n = loadedFiles.length
 
-    axios.post('/api/upload', fd).then(res => {
-      let filename = ''
-      let newFile = null
-
-      for (let i = 0; i < n; i++) {
-        let file = loadedFiles.shift()
+    if (n > 0) {
+      axios.post('/api/upload', fd).then(res => {
+        let filename = ''
+        let newFile = null
+  
+        for (let i = 0; i < n; i++) {
+          let file = loadedFiles.shift()
+      
+          newFile = this.updateLoadedFile(file, {
+            ...file,
+            isUploading: true
+          })
+  
+          filename = res.data[i]
     
-        newFile = this.updateLoadedFile(file, {
-          ...file,
-          isUploading: true
-        })
-
-        filename = res.data[i]
-  
-        axios.get('/api/predict?fileName=' + filename).then(res => {
-          let diagnosis = res.data.diagnosis
-          let confidence = res.data.confidence
-  
-          this.setState({
-            dataObject: {
-              Confidence: confidence,
-              Diagnosis: diagnosis,
-              Filename: res.config.url.split('=').pop(),
-              Timestamp: Date(Date.now()),
-            }
+          axios.get('/api/predict?fileName=' + filename).then(res => {
+            let diagnosis = res.data.diagnosis
+            let confidence = res.data.confidence
+    
+            this.setState({
+              dataObject: {
+                Confidence: confidence,
+                Diagnosis: diagnosis,
+                Filename: res.config.url.split('=').pop(),
+                Timestamp: Date(Date.now()),
+              }
+            })
+    
+            this.updateLoadedFile(newFile, {
+              ...newFile,
+              isUploading: false
+            })
           })
   
-          this.updateLoadedFile(newFile, {
-            ...newFile,
-            isUploading: false
-          })
-        })
-
-        if (i === n - 1) {
-          this.setState({ loadedFiles: [] })
-          this.setState({ fd: null })
+          if (i === n - 1) {
+            this.setState({ loadedFiles: [] })
+            this.setState({ fd: null })
+          }
         }
-      }
-    }).catch(err => {
-      console.log(err);
-    })
+      }).catch(err => {
+        console.log(err);
+      })
+    } else {
+      alert('No loaded file!')
+    }
 
   }
 
@@ -227,12 +231,6 @@ class DraggableUploader extends Component {
           </div>
 
           <div className="file-browser-container">
-            {/* <AnchorButton
-              text="Browse Files"
-              intent={ Intent.PRIMARY }
-              minimal={ true }
-              onClick={ () => this.fileInput.click() }
-            /> */}
             <button
               type="button" className="btn btn-primary"
               onClick={ () => this.fileInput.click() }
@@ -243,12 +241,6 @@ class DraggableUploader extends Component {
         </div>
 
         <div>
-          {/* <AnchorButton
-            text="Analyze Image(s)"
-            className="i-btn"
-            intent={ Intent.SUCCESS }
-            onClick={ () => this.uploadFiles() }
-          /> */}
           <button
             type="button" className="btn btn-primary i-btn"
             style={ { marginBottom: '2em', marginTop: '1.5em' } }

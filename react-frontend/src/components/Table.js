@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-// import { AnchorButton, Intent } from '@blueprintjs/core';
 
 class Table extends Component {
   constructor(props) {
@@ -45,17 +44,11 @@ class Table extends Component {
           }
         }
       >
-        {/* {
-          this.state.rowData.length > 0 && */}
-          <AgGridReact
-            columnDefs={ this.state.columnDefs }
-            rowData={ this.state.rowData }>
-          </AgGridReact>
-        {/* } */}
-        {/* {
-          this.state.rowData.length > 0 && */}
-          <Exporter data={ this.state } />
-        {/* } */}
+        <AgGridReact
+          columnDefs={ this.state.columnDefs }
+          rowData={ this.state.rowData }>
+        </AgGridReact>
+        <Exporter data={ this.state } />
       </div>
     )
   }
@@ -96,13 +89,6 @@ class Exporter extends Component {
 
   render(){
     return(
-      // <AnchorButton 
-      //   text="Export Table"
-      //   className="i-btn"
-      //   intent={ Intent.SUCCESS }
-      //   onClick={ () => this.exportFun() }
-      //   style={ { marginTop: '.5em' } }
-      // />
       <button
         type="button" className="btn btn-primary i-btn"
         style={ { marginBottom: '2em', marginTop: '1.5em' } }
