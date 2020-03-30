@@ -169,13 +169,14 @@ class DraggableUploader extends Component {
         style={ { display: "flex", flexDirection: "column" } }
       >
 
-        <div 
+        {/* <div 
          className="sub-header"
-         style={{'font-size': '3vw'}}>Covid-19 Detection System</div>
+         style={{'font-size': '3vw'}}>Covid-19 Detection System
+        </div> */}
 
         <div 
           className="draggable-container"
-          style={ { width: '90vw' } }
+          style={ { width: '90vw', border: 'black dashed 2px', backgroundColor: 'white' } }
         >
           {/* TODO: fix the double submit issue */}
           <input
@@ -219,27 +220,43 @@ class DraggableUploader extends Component {
             }
           </div>
 
-          <div className="helper-text" >
-            Drag and Drop Here: Lung X-Ray Image(s)
+          <div className="helper-text" style={ { color: 'black' } }>
+            Drag & Drop Chest X-Ray (PA) Image(s)
+            <br /><br /><br />
+            or
           </div>
 
           <div className="file-browser-container">
-            <AnchorButton
+            {/* <AnchorButton
               text="Browse Files"
               intent={ Intent.PRIMARY }
               minimal={ true }
               onClick={ () => this.fileInput.click() }
-            />
+            /> */}
+            <button
+              type="button" className="btn btn-primary"
+              onClick={ () => this.fileInput.click() }
+            >
+              Upload file(s)
+            </button>
           </div>
         </div>
-        <span>
-          <AnchorButton
+
+        <div>
+          {/* <AnchorButton
             text="Analyze Image(s)"
             className="i-btn"
             intent={ Intent.SUCCESS }
             onClick={ () => this.uploadFiles() }
-          />
-        </span>
+          /> */}
+          <button
+            type="button" className="btn btn-primary i-btn"
+            style={ { marginBottom: '2em', marginTop: '1.5em' } }
+            onClick={ () => this.uploadFiles() }
+          >
+            Analyze X-Ray image(s)
+          </button>
+        </div>
 
         {
           this.state.dataObject.confidence !== '' &&
