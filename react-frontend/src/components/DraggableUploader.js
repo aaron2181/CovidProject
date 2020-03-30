@@ -243,7 +243,7 @@ class DraggableUploader extends Component {
         <div>
           <button
             type="button" className="btn btn-primary i-btn"
-            style={ { marginBottom: '2em', marginTop: '1.5em' } }
+            style={ { marginBottom: '1em', marginTop: '1.5em' } }
             onClick={ () => this.uploadFiles() }
           >
             Analyze X-Ray image(s)

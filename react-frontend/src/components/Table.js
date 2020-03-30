@@ -41,18 +41,17 @@ class Table extends Component {
         className="ag-theme-balham"
         style={
           {
-            height: '40vh',
+            height: '35vh',
             minHeight: '200px',
             width: '70vw'
           }
         }
       >
+        <Exporter data={ this.state } />
         <AgGridReact
           columnDefs={ this.state.columnDefs }
           rowData={ this.state.rowData }
-        >
-        </AgGridReact>
-        <Exporter data={ this.state } />
+        />
       </div>
     )
   }
@@ -95,7 +94,7 @@ class Exporter extends Component {
     return(
       <button
         type="button" className="btn btn-primary i-btn"
-        style={ { marginBottom: '2em', marginTop: '1.5em' } }
+        style={ { marginBottom: '2em' } }
         onClick={ () => this.exportFun() }
       >
         Export Table
