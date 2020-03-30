@@ -8,14 +8,17 @@ class Table extends Component {
     super(props);
     this.state = {
       columnDefs: [
-        { headerName: "Filename", field: "Filename", sortable: true },
+        {
+          headerName: "Filename", field: "Filename", sortable: true, width: 275
+        },
         { headerName: "Confidence", field: "Confidence", sortable: true },
         { headerName: "Diagnosis", field: "Diagnosis", sortable: true },
         {
           headerName: "Timestamp",
           field: "Timestamp",
           sortable: true,
-          sort: "desc" 
+          sort: "desc",
+          width: 400
         },
       ],
       rowData: [],
@@ -46,7 +49,8 @@ class Table extends Component {
       >
         <AgGridReact
           columnDefs={ this.state.columnDefs }
-          rowData={ this.state.rowData }>
+          rowData={ this.state.rowData }
+        >
         </AgGridReact>
         <Exporter data={ this.state } />
       </div>
