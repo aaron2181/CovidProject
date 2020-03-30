@@ -68,7 +68,7 @@ class Exporter extends Component {
   exportFun() {
     if (this.props.data.rowData.length > 0) {
       let json = this.props.data.rowData
-      let fields = ["Filename", "Confidence", "Diagnosis"]
+      let fields = ["Filename", "Confidence", "Diagnosis", "Timestamp"]
       let replacer = (key, value) => { return value === null ? '' : value }
  
       let csv = json.map(row => {
