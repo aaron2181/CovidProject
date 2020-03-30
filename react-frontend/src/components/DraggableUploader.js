@@ -180,21 +180,28 @@ class DraggableUploader extends Component {
 
         <div 
           className="draggable-container"
-          style={ { width: '90vw', border: 'black dashed 2px', backgroundColor: 'white' } }
+          style={
+            {
+              width: '90vw',
+              border: 'black dashed 2px',
+              backgroundColor: 'white'
+            }
+          }
         >
           {/* TODO: fix the double submit issue */}
-          <input
-            multiple
-            type="file" id="file-browser-input" name="file-browser-input"
-            ref={ input => this.fileInput = input }
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // console.log(e.target.files)
-            }}
-            // onDrop={ e => this.onFileLoad(e) }
-            onChange={ e => this.onFileLoad(e) }
-          />
+          <div style={ { zIndex: '2' } }>
+            <input
+              multiple
+              type="file" id="file-browser-input" name="file-browser-input"
+              ref={ input => this.fileInput = input }
+              onDragOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              // onDrop={ e => this.onFileLoad(e) }
+              onChange={ e => this.onFileLoad(e) }
+            />
+          </div>
 
           <div className="files-preview-container ip-scrollbar">
             {
@@ -224,9 +231,12 @@ class DraggableUploader extends Component {
             }
           </div>
 
-          <div className="helper-text" style={ { color: 'black' } }>
+          <div
+            className="helper-text" style={ { color: 'black', zIndex: '0' } }
+          >
+            <br />
             Drag & Drop Chest X-Ray (PA) Image(s)
-            <br /><br /><br />
+            <br /><br />
             or
           </div>
 
