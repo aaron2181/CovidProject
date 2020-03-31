@@ -144,6 +144,7 @@ class DraggableUploader extends Component {
               Timestamp: Date(Date.now()),
             }
     
+            console.log(dataObject)
             this.setState({
               dataTable: [ ...this.state.dataTable, dataObject ] 
             })
