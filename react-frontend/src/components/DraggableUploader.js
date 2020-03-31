@@ -118,6 +118,10 @@ class DraggableUploader extends Component {
     this.setState({ loading: true })
 
     let n = loadedFiles.length
+    let endCounter = 0
+    let timer = setTimeout(() => {
+      this.setState({ loading: true })
+    }, 5000)
 
     if (n > 0) {
       axios.post('/api/upload', fd).then(res => {
@@ -135,6 +139,12 @@ class DraggableUploader extends Component {
           filename = res.data[i]
     
           axios.get('/api/predict?fileName=' + filename).then(res => {
+            endCounter = endCounter + 1
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+              this.setState({ loading: true })
+            }, 5000)
+
             let diagnosis = res.data.diagnosis
             let confidence = res.data.confidence
             let dataObject = {
@@ -144,26 +154,21 @@ class DraggableUploader extends Component {
               Timestamp: Date(Date.now()),
             }
     
-            // console.log(dataObject)
             this.setState({
               dataTable: [ ...this.state.dataTable, dataObject ] 
             })
-            // dataTable.push(dataObject)
-            setTimeout(() => {
-              console.log(this.state.dataTable)
-            }, 300)
     
             this.updateLoadedFile(newFile, {
               ...newFile,
               isUploading: false
             })
+
+            if (endCounter === n - 1) {
+              this.setState({ loadedFiles: [] })
+              this.setState({ fd: null })
+              this.setState({ loading: false })
+            }
           })
-  
-          if (i === n - 1) {
-            this.setState({ loadedFiles: [] })
-            this.setState({ fd: null })
-            this.setState({ loading: false })
-          }
         }
       }).catch(err => {
         console.log(err);
