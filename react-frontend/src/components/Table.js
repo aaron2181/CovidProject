@@ -25,15 +25,24 @@ class Table extends Component {
     }
   }
 
-  componentWillReceiveProps(props) {
-    if (
-      props.data.Confidence !== '' && props.data.Diagnosis !== '' &&
-      JSON.stringify(this.props.data) !==
-      JSON.stringify(this.state.rowData[this.state.rowData.length - 1])
-    ) {
-      this.setState({ rowData: [ ...this.state.rowData, props.data ] })
-    }
+  componentWillMount() {
+    this.setState({
+      rowData: [ ...this.props.data ]
+    })
   }
+
+  // componentWillReceiveProps(props) {
+  //   // if (
+  //   //   props.data.Confidence !== '' && props.data.Diagnosis !== '' &&
+  //   //   JSON.stringify(this.props.data) !==
+  //   //   JSON.stringify(this.state.rowData[this.state.rowData.length - 1])
+  //   // ) {
+  //   //   this.setState({ rowData: [ ...this.state.rowData, props.data ] })
+  //   // }
+  //   setTimeout(() => {
+  //     console.log(props.data, 300)
+  //   }, 500)
+  // }
 
   render() {
     return (

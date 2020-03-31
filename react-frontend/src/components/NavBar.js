@@ -5,7 +5,7 @@ const NavBar = () => {
   return (
     <div>
       <nav className="navbar navbar-expand-md bg-primary navbar-dark">
-        <div class="container-fluid">
+        <div className="container-fluid">
           <a className="navbar-brand" href="/">
             <img
               src={ require("../statics/images/image_86x60.png") }

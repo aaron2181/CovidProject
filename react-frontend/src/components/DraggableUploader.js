@@ -19,11 +19,12 @@ class DraggableUploader extends Component {
       fd: null,
       confidence: '',
       diagnosis: '',
-      dataObject: {
-        Patient_ID: '',
-        Confidence: '',
-        Diagnosis: '',        
-      },
+      dataTable: [],
+      // dataObject: {
+      //   Patient_ID: '',
+      //   Confidence: '',
+      //   Diagnosis: '',        
+      // },
       loading: false,
     };
 
@@ -136,14 +137,15 @@ class DraggableUploader extends Component {
           axios.get('/api/predict?fileName=' + filename).then(res => {
             let diagnosis = res.data.diagnosis
             let confidence = res.data.confidence
+            let dataObject = {
+              Confidence: confidence,
+              Diagnosis: diagnosis,
+              Filename: res.config.url.split('=').pop(),
+              Timestamp: Date(Date.now()),
+            }
     
             this.setState({
-              dataObject: {
-                Confidence: confidence,
-                Diagnosis: diagnosis,
-                Filename: res.config.url.split('=').pop(),
-                Timestamp: Date(Date.now()),
-              }
+              dataTable: [ ...this.state.dataTable, dataObject ] 
             })
     
             this.updateLoadedFile(newFile, {
@@ -166,6 +168,26 @@ class DraggableUploader extends Component {
     }
 
   }
+
+  // mockUpload = () => {
+  //   let dataObject = {
+  //     Confidence: new Date(),
+  //     Diagnosis: new Date(),
+  //     Filename: new Date(),
+  //     Timestamp: Date(Date.now()),
+  //   }
+
+  //   this.setState({
+  //     dataTable: [ ...this.state.dataTable, dataObject ],
+  //     loading: true,
+  //   })
+
+  //   setTimeout(() => {
+  //     this.setState({ loading: false })
+
+  //     console.log(this.state.dataTable)
+  //   }, 500)
+  // }
 
   render() {
     const { loadedFiles } = this.state;
@@ -255,6 +277,16 @@ class DraggableUploader extends Component {
             </div>
           </div>
 
+          {/* <div>
+            <button
+              type="button" className="btn btn-primary i-btn"
+              style={ { marginBottom: '1em', marginTop: '1.5em' } }
+              onClick={ () => this.mockUpload() }
+            >
+              Mock
+            </button>
+          </div> */}
+
           <div>
             <button
               type="button" className="btn btn-primary i-btn"
@@ -265,11 +297,7 @@ class DraggableUploader extends Component {
             </button>
           </div>
 
-          {
-            this.state.dataObject.confidence !== '' &&
-            this.state.dataObject.diagnosis !== '' &&
-            <Table data={ this.state.dataObject }/>
-          }
+          <Table data={ this.state.dataTable }/>
         </div>
       ) : (
         <div className="i-loading-frame">
@@ -281,7 +309,7 @@ class DraggableUploader extends Component {
                   className="spinner-grow text-primary"
                   role="status"
                 >
-                  <span class="sr-only">{ val }</span>
+                  <span className="sr-only">{ val }</span>
                 </div>
               )
             })
