@@ -120,7 +120,7 @@ class DraggableUploader extends Component {
     let n = loadedFiles.length
     let endCounter = 0
     let timer = setTimeout(() => {
-      this.setState({ loading: true })
+      this.setState({ loading: false })
     }, 5000)
 
     if (n > 0) {
@@ -142,7 +142,7 @@ class DraggableUploader extends Component {
             endCounter = endCounter + 1
             clearTimeout(timer)
             timer = setTimeout(() => {
-              this.setState({ loading: true })
+              this.setState({ loading: false })
             }, 5000)
 
             let diagnosis = res.data.diagnosis
@@ -163,11 +163,13 @@ class DraggableUploader extends Component {
               isUploading: false
             })
 
-            if (endCounter === n - 1) {
-              this.setState({ loadedFiles: [] })
-              this.setState({ fd: null })
-              this.setState({ loading: false })
-            }
+            setTimeout(() => {
+              if (endCounter === n - 1) {
+                this.setState({ loadedFiles: [] })
+                this.setState({ fd: null })
+                this.setState({ loading: false })
+              }
+            }, 300)
           })
         }
       }).catch(err => {
