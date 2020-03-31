@@ -160,7 +160,11 @@ class DraggableUploader extends Component {
             this.setState({ loadedFiles: [] })
             this.setState({ fd: null })
             this.setState({ loading: false })
-            this.setState({ dataTable })
+            console.log(dataTable)
+
+            setTimeout(() => {
+              this.setState({ dataTable })
+            }, 300)
           }
         }
       }).catch(err => {
