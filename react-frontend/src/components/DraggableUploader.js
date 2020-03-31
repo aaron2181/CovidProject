@@ -165,12 +165,15 @@ class DraggableUploader extends Component {
 
             setTimeout(() => {
               if (endCounter === n - 1) {
-                this.setState({ loadedFiles: [] })
-                this.setState({ fd: null })
                 this.setState({ loading: false })
               }
             }, 300)
           })
+
+          if (i === n - 1) {
+            this.setState({ loadedFiles: [] })
+            this.setState({ fd: null })
+          }
         }
       }).catch(err => {
         console.log(err);
