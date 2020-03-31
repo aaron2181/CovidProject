@@ -31,6 +31,17 @@
   min-width: 200px;
 }
 
+.i-loading-frame {
+  background-color: white; 
+  width: 90vw;
+  max-width: 500px;
+  margin: 20% auto;
+  border: 1px solid #f1f1f1; 
+  border-radius: 5px;
+  box-shadow: 1px 2px 5px #f1f1f1;
+  padding: 20px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

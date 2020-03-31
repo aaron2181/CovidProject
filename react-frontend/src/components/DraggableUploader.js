@@ -24,6 +24,7 @@ class DraggableUploader extends Component {
         Confidence: '',
         Diagnosis: '',        
       },
+      loading: false,
     };
 
     this.onFileLoad = this.onFileLoad.bind(this)
@@ -113,6 +114,7 @@ class DraggableUploader extends Component {
 
   uploadFiles() {
     const { loadedFiles, fd } = this.state;
+    this.setState({ loading: true })
 
     let n = loadedFiles.length
 
@@ -153,6 +155,7 @@ class DraggableUploader extends Component {
           if (i === n - 1) {
             this.setState({ loadedFiles: [] })
             this.setState({ fd: null })
+            this.setState({ loading: false })
           }
         }
       }).catch(err => {
@@ -168,105 +171,123 @@ class DraggableUploader extends Component {
     const { loadedFiles } = this.state;
 
     return (
-      <div
-        className="inner-container"
-        style={ { display: "flex", flexDirection: "column" } }
-      >
-
-        {/* <div 
-         className="sub-header"
-         style={{'font-size': '3vw'}}>Covid-19 Detection System
-        </div> */}
-
-        <div 
-          className="draggable-container"
-          style={
-            {
-              width: '90vw',
-              border: 'black dashed 2px',
-              backgroundColor: 'white'
-            }
-          }
+      !this.state.loading ? (
+        <div
+          className="inner-container"
+          style={ { display: "flex", flexDirection: "column" } }
         >
-          {/* TODO: fix the double submit issue */}
-          <div style={ { zIndex: '2' } }>
-            <input
-              multiple
-              type="file" id="file-browser-input" name="file-browser-input"
-              ref={ input => this.fileInput = input }
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              // onDrop={ e => this.onFileLoad(e) }
-              onChange={ e => this.onFileLoad(e) }
-            />
-          </div>
 
-          <div className="files-preview-container ip-scrollbar">
-            {
-              loadedFiles.map((file, idx) => {
-                return (
-                  <div className="file" key={ idx }>
-                    <img src={ file.data } />
+          {/* <div 
+          className="sub-header"
+          style={{'font-size': '3vw'}}>Covid-19 Detection System
+          </div> */}
 
-                    <div className="container">
-                      <span className="progress-bar">
-                        {
-                          file.isUploading &&
-                          <ProgressBar/>
-                        }
-                      </span>
-
-                      <span
-                        className="remove-btn"
-                        onClick={ () => this.removeLoadedFile(file) }
-                      >
-                        <Icon icon={ remove } size={ 19 } />
-                      </span>
-                    </div>
-                  </div>
-                )
-              })
+          <div 
+            className="draggable-container"
+            style={
+              {
+                width: '90vw',
+                border: 'black dashed 2px',
+                backgroundColor: 'white'
+              }
             }
-          </div>
-
-          <div
-            className="helper-text" style={ { color: 'black', zIndex: '0' } }
           >
-            <br />
-            Drag & Drop Chest X-Ray (PA) Image(s)
-            <br /><br />
-            or
+            {/* TODO: fix the double submit issue */}
+            <div style={ { zIndex: '2' } }>
+              <input
+                multiple
+                type="file" id="file-browser-input" name="file-browser-input"
+                ref={ input => this.fileInput = input }
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                // onDrop={ e => this.onFileLoad(e) }
+                onChange={ e => this.onFileLoad(e) }
+              />
+            </div>
+
+            <div className="files-preview-container ip-scrollbar">
+              {
+                loadedFiles.map((file, idx) => {
+                  return (
+                    <div className="file" key={ idx }>
+                      <img src={ file.data } />
+
+                      <div className="container">
+                        <span className="progress-bar">
+                          {
+                            file.isUploading &&
+                            <ProgressBar/>
+                          }
+                        </span>
+
+                        <span
+                          className="remove-btn"
+                          onClick={ () => this.removeLoadedFile(file) }
+                        >
+                          <Icon icon={ remove } size={ 19 } />
+                        </span>
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </div>
+
+            <div
+              className="helper-text" style={ { color: 'black', zIndex: '0' } }
+            >
+              <br />
+              Drag & Drop Chest X-Ray (PA) Image(s)
+              <br /><br />
+              or
+            </div>
+
+            <div className="file-browser-container">
+              <button
+                type="button" className="btn btn-primary"
+                style={ { minWidth: '150px' } }
+                onClick={ () => this.fileInput.click() }
+              >
+                Upload file(s)
+              </button>
+            </div>
           </div>
 
-          <div className="file-browser-container">
+          <div>
             <button
-              type="button" className="btn btn-primary"
-              style={ { minWidth: '150px' } }
-              onClick={ () => this.fileInput.click() }
+              type="button" className="btn btn-primary i-btn"
+              style={ { marginBottom: '1em', marginTop: '1.5em' } }
+              onClick={ () => this.uploadFiles() }
             >
-              Upload file(s)
+              Analyze X-Ray image(s)
             </button>
           </div>
-        </div>
 
-        <div>
-          <button
-            type="button" className="btn btn-primary i-btn"
-            style={ { marginBottom: '1em', marginTop: '1.5em' } }
-            onClick={ () => this.uploadFiles() }
-          >
-            Analyze X-Ray image(s)
-          </button>
+          {
+            this.state.dataObject.confidence !== '' &&
+            this.state.dataObject.diagnosis !== '' &&
+            <Table data={ this.state.dataObject }/>
+          }
         </div>
-
-        {
-          this.state.dataObject.confidence !== '' &&
-          this.state.dataObject.diagnosis !== '' &&
-          <Table data={ this.state.dataObject }/>
-        }
-      </div>
+      ) : (
+        <div className="i-loading-frame">
+          {
+            ['Loading...', 'Loading', 'Loading'].map((val, index) => {
+              return (
+                <div
+                  key={ index }
+                  className="spinner-grow text-primary"
+                  role="status"
+                >
+                  <span class="sr-only">{ val }</span>
+                </div>
+              )
+            })
+          }
+        </div>
+      )
     );
   }
 }
