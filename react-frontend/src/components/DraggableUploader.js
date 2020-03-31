@@ -114,7 +114,7 @@ class DraggableUploader extends Component {
   }
 
   uploadFiles() {
-    const { loadedFiles, fd, dataTable } = this.state
+    const { loadedFiles, fd } = this.state
     this.setState({ loading: true })
 
     let n = loadedFiles.length
@@ -144,11 +144,14 @@ class DraggableUploader extends Component {
               Timestamp: Date(Date.now()),
             }
     
-            console.log(dataObject)
-            // this.setState({
-            //   dataTable: [ ...this.state.dataTable, dataObject ] 
-            // })
-            dataTable.push(dataObject)
+            // console.log(dataObject)
+            this.setState({
+              dataTable: [ ...this.state.dataTable, dataObject ] 
+            })
+            // dataTable.push(dataObject)
+            setTimeout(() => {
+              console.log(this.state.dataTable)
+            }, 300)
     
             this.updateLoadedFile(newFile, {
               ...newFile,
@@ -160,11 +163,6 @@ class DraggableUploader extends Component {
             this.setState({ loadedFiles: [] })
             this.setState({ fd: null })
             this.setState({ loading: false })
-            console.log(dataTable)
-
-            setTimeout(() => {
-              this.setState({ dataTable })
-            }, 300)
           }
         }
       }).catch(err => {
