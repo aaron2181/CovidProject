@@ -130,6 +130,12 @@ class DraggableUploader extends Component {
   
         for (let i = 0; i < n; i++) {
           let file = loadedFiles.shift()
+
+          this.setState({ loading: true })
+          clearTimeout(timer)
+          timer = setTimeout(() => {
+            this.setState({ loading: false })
+          }, 5000)
       
           newFile = this.updateLoadedFile(file, {
             ...file,
@@ -139,8 +145,8 @@ class DraggableUploader extends Component {
           filename = res.data[i]
     
           axios.get('/api/predict?fileName=' + filename).then(res => {
-            this.setState({ loading: true })
             endCounter = endCounter + 1
+            this.setState({ loading: true })
             clearTimeout(timer)
             timer = setTimeout(() => {
               this.setState({ loading: false })
